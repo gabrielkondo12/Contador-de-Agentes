@@ -1,0 +1,38 @@
+import openpyxl
+cont = 0
+contH = 0
+contI = 0
+contComp = 0
+
+contNada = 0
+
+# Abrindo o arquivo Excel
+workbook = openpyxl.load_workbook('Projeto1.xlsx')
+
+# Selecionando a planilha
+worksheet = workbook['promocao2']
+
+# Loop para iterar sobre as células na coluna desejada
+for i, row in enumerate(worksheet.iter_rows(values_only=True)):
+    try:
+        # Verificar se a célula na coluna é igual a "AGENTE"
+        if row[1] == 'AGENTE EDUCADOR':
+            # Se sim, imprimir valor da célula na coluna seguinte
+            cont += 1
+            if row[2] == 'Inabilitado':
+                # Conta os inabilitados
+                contI += 1
+                if row[3] == 'SERVIDOR NÃO COMPROVOU UMA DAS QUALIFICAÇÕES EXIGIDAS':
+                    # Conta quantos reprovaram por determinado motivo
+                    contComp += 1
+                elif row[3] is None:
+                    # Conta as células vazias
+                    contNada += 1
+            else:
+                # Conta os habilitados
+                contH += 1
+    except IndexError:
+        break
+print('Teve um total de {} agentes inscritos para a promoção, sendo {} habilitados e {} inabilitados'.format(cont, contH, contI))
+print('{} agentes não comprovaram qualificação exigida.'.format(contComp))
+print('{} agentes não especifica o motivo da inabilitação.'.format(contNada))
